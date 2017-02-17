@@ -1,0 +1,164 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+\usepackage{graphicx}
+
+
+\begin{document}
+\begin{portada}\begin{center}
+\vspace*{-1in}
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=4cm, height=4cm]{escudo.png}
+\end{center}
+\end{figure}
+
+UNIVERSIDAD DE SONORA\\
+\vspace*{0.15in}
+DEPARTAMENTO DE CIENCIAS EXACTAS Y NATURALES \\
+\vspace*{0.6in}
+
+\begin{Large}
+\textbf{Iniciándose en Python} \\
+\end{Large}
+\vspace*{0.3in}
+
+\vspace*{0.3in}
+\rule{80mm}{0.1mm}\\
+\vspace*{0.1in}
+\begin{large}
+Por Álvarez Sánchez Francisco Eduardo
+\end{large}
+
+\begin{large}
+Maestro: Dr. Carlos Lizárrga Celaya \\
+\end{large}
+\vspace*{5cm}
+\begin{large}
+Hermosillo, Sonora a \today
+\end{large}
+\end{center}
+\thispagestyle{empty}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\cleardoublepage
+
+\section{Introducción}
+En el siguiente documento se presenta una interpretación de datos que hemos obtenido anteriormente en las actividades 1 y 2. Estos datos pertenecen a la Universidad de Wyoming, en donde se estudian diferentes localidades de Estados Unidos y otras repartidas por el mundo. En este caso en especifico trabajaremos con los datos de la ciudad Del Rio en Texas. 
+Utilizando como herramienta para manejar los datos utilizaremos la plataforma Jupyter Notebook con Python para realizar tablas y gráficas de diferentes tipos. 
+\newpage
+\section{Desarollo del estudio de datos}
+\subsection{Preparación de datos}
+Utilizando los datos obtenidos con anterioridad acerca de las condiciones meteorológicas de la atmósfera en determinado sitio de observación, realizaremos una limpieza de estos mismos y obtendremos datos específicos de cada día del año.
+
+Usaremos algunos comandos en bash, se unieron todos los archivos HTML en uno solo con formato .txt con el nombre de sondeos.txt. Con la terminal y utilizando los comandos para filtrar ciertas variables, separamos la información en 2 archivos; uno con la información de los sondeos realizados en el formato 12Z y otro con los sondeos en 00Z.
+
+De los archivos queremos rescatar la información denominada como CAPE y otro llamado Precipitable water o PW.Para realizar esto, se utilizó el siguiente comando en la terminal:
+
+\begin{verbatim}
+cat sondeos.txt | egrep -i "Observations| CAPE | precipitable" |
+sed -e "/12Z/,+2d"> 00Zanual.txt
+\end{verbatim}
+
+Para los días en los que se hicieron sondeos a las 00Z (GMT), y
+
+\begin{verbatim}
+cat sondeos.txt | egrep -i "Observations| CAPE | precipitable"
+| sed -e "/00Z/,+2d" > 12Zanual.txt
+\end{verbatim}
+
+Para todos los días que se hicieron los sondeos a las 12Z (GMT).
+Con estos datos, podemos comenzar a utilizar Jupyter Notebook para realizar una interpretación de estos datos. 
+
+\subsection{Jupyter Notebook}
+
+Ahora, iniciamos desde la terminal la plataforma Jupyter Notebook. Este abre una página en el navegador y damos incio a un archivo nuevo. Para comenzar, necesitamos indicar las bibliotecas a utilizar. En este caso utilizaremos panda y para ello colocamos los siguientes comandos en distintas líneas cada uno para ejecutarlos presionando SHIFT+ENTER.
+
+\begin{verbatim}
+import pandas as pd
+import numpy as np
+import matplotlib as plt
+\end{verbatim}
+
+Procederemos a leer el archivo desde Jupyter con el comando siguiente:
+
+\begin{verbatim}
+df= pd.read_csv("/home/franciscoeas/Actividad3/12ZAnual.csv"
+, names=[’Fecha’,’CAPE’, ’PW’])
+\end{verbatim}
+
+Ya teniendo leídos los datos, pasaremos a realizar las tablas. Una contiene los primeros 10 datos del archivo con sus respectivas variables y en la segundo se observan datos estadísticos acerca de todos los datos. Los comandos utilizados fueron: 
+
+\begin{verbatim}
+df.head(10)
+df.describe()
+df.apply(lambda x:sum(x.isnull()),axis=0)
+\end{verbatim}
+\begin{center}
+\includegraphics[width=3cm, height=4cm]{Tabla1.png}
+\vspace{0.5cm}
+
+\includegraphics[width=3cm, height=4cm]{Tabla2.png}
+\end{center}
+\subsection{CAPE}
+Para iniciar los análisis estadísticos de la variable, utilzarémos Jupyter Notebook con Python para hacer un histograma, y dos diagramas de caja; uno para todo el conjunto de datos y el segundo será una comparativa de los datos organizados por un mes
+
+\begin{verbatim}
+df.columns
+matplotlib inline
+df.hist(u’CAPE’,bins=20)
+\end{verbatim}
+
+Son los comandos utilizados para generar el siguiente histograma de la variable CAPE
+\begin{center}
+\includegraphics[width=12cm, height=8cm]{1.png}
+\end{center}
+\newpage
+Para generar un diagrama de caja, utilizaremos el siguiente comando:
+\begin{verbatim}
+df.boxplot(column=u'CAPE')
+\end{verbatim}
+
+
+Y el resultado es el siguiente:
+
+\begin{center}
+\includegraphics[width=12cm, height=8cm]{2.png}
+\end{center}
+
+\newpage
+Ahora, para realizar una comparativa con mes, utilizaremos los siguientes comandos para realizar un diagrama:
+\begin{verbatim}
+df[’month’]=pd.DatetimeIndex(df[u’Fecha’]).month
+
+df.boxplot(column=u’CAPE’,by=u’month’)
+\end{verbatim}
+
+\begin{center}
+\includegraphics[width=12cm, height=8cm]{3.png}
+\end{center}
+\newpage
+\subsection{Pricipitable Water (PW)}
+Procederemos a realizar lo mismo pero ahora con los datos de Precipital Water. Repetiremos los pasos pero ahora con el conjunto de datos PW.
+Obtenemos como resultado:
+
+\begin{center}
+\includegraphics[width=12cm, height=8cm]{4.png}
+\vspace{0.5cm}
+\includegraphics[width=12cm, height=8cm]{5.png}
+\vspace{0.5cm}
+\includegraphics[width=12cm, height=8cm]{6.png}
+\end{center}
+
+\section{Conclusión}
+Esta actividad resultó bastante útil para próximos trabajos. Fue investigar de los comandos necesarios de Python y ya con esto realizar la actividad. 
+Resulto bastante entretenida y muy productiva, nos enseño a que hacer una vez que tenemos los datos en nuestro poder. 
+Python ofrece un sin fin de utilidades y aprenderemos a usarlo poco a poco. Esta fue una de las muchas capacidades de python.
+
+
+
+\end{document}
