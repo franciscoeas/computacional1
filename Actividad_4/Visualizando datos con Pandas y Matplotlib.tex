@@ -1,0 +1,166 @@
+\documentclass[12pt]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{setspace}
+\usepackage{hyperref}
+\titlespacing*{\section}
+{0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%PORTADA
+
+\begin{titlepage}
+\newcommand{\Hrule}{\rule{\linewidth}{0.5mm}}
+
+\begin{center}
+\includegraphics[width=4cm]{escudo.png}
+\end{center}
+
+\begin{center}
+\textsc{\LARGE Universidad de Sonora}\\[0.5cm]
+\textsc{División de Ciencias Exactas y Naturales}\\[0.1cm]
+\textsc{Departamento de Física}\\[1.5cm]
+\Hrule \\[0.5cm]   
+   \textsc{\Large \bfseries Visualizando datos con Pandas y Matplotlib} \\[0.5cm]
+\Hrule \\[1.5cm]
+\textsc{\Large Alvarez Sanchez Francisco Eduardo} \\[1cm]
+\textsc{\Large Profesor: Carlos Lizárraga Celaya} \\[2.5cm]
+\textsc{\today}
+\end{center}
+\end{titlepage}
+\pagebreak
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\cleardoublepage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resúmen}
+En la siguiente actividad fue para aprender un poco mas acerca de área de trabajo de python, los pandas utilizados para poder trabajar con las graficas y utilizaremos metodos para comparar los datos interpretados. 
+
+Aprenderemos tambén a trabajar con tefigramas en python y cual puede ser una de las utilidades de estos.
+\section{Introducción}
+En el siguiente trabajo se estudiara otro aspecto de los sondeos de la localizacion escogida en un principio. Usaremos los datos de presion, temperatura y temperatura de rocio, en este caso de la fecha del 15 de Febrero de 2017. Para poder trabajar con los datos fue necesario trabajar con la plataforma de Jupyter Notebook, con esto trabajamos  con python para poder graficar mas sencillamente. 
+
+Para comparar las gráficas utilizaremos un paquete llamado tephi que nos servira para realizar tefigramas y compararlo con el que se realiza donde se realizan los sondeos.
+Para esto usaremos un fork a nuestro propio repositorio de Github y clonarlo en la computadora para poder instalarlo.
+
+\begin{verbatim}
+https://github.com/franciscoeas/tephi
+pip install --user tephi
+\end{verbatim}
+
+
+\section{Desarrollo}
+Para graficar el tephi necesitamos la temperatura contra la presión y la temperatura de ricío contra presión, para cada uno tuvimos que realizar dos documentos con los datos separados y ordenados. 
+
+Ya teniendo eso los leémos desde python para poder trabajar con ellos. Hacemos la siguiente tabla para poder trabajar con los datos.
+\begin{center}
+\includegraphics[width=12cm, height=12cm]{tabla.png}
+\end{center}
+
+\newpage
+\subsection{Gráficas}
+Ahora para graficar usaremos los siguientes comandos:
+Antes que nada declaramos las variables
+
+Graficaremos lo siguiente: 
+Para graficar la presió contra altura
+\begin{verbatim}
+x=df[u'HGHT']
+y=df[u'PRES']
+Para graficar:
+mplt.plot(x,y)
+mplt.grid(True)
+plt.xlabel('Altura (m)')
+plt.ylabel('Presión (hPa)')
+\end{verbatim}
+
+\begin{center}
+\includegraphics[width=12cm, height=12cm]{1.png}
+
+Para graficar temperatura contra altura:
+\begin{verbatim}
+x=df[u'Temperatura'] 
+y=df[u'Altura']
+mplt.plot(x,y)
+mplt.grid(True)
+plt.xlabel('Temperatura (°C)')
+plt.ylabel('Altura (m)')
+\end{verbatim}
+\includegraphics[width=12cm, height=12cm]{2.png}
+\vspace{0.5cm}
+
+\newpage
+Para graficar la temperatura de rocío contra la altitud:
+\begin{verbatim}
+x=df[u'DWPT']
+y=df[u'Altura']
+mplt.plot(x,y)
+mplt.grid(True)
+plt.xlabel('DWPT (°C)')
+plt.ylabel('Altitud')
+\end{verbatim}
+\includegraphics[width=12cm, height=12cm]{3.png}
+
+\newpage
+Para graficar la comparativa entre las temperaturas:
+\begin{verbatim}
+Para la primera gráfica
+x=df[u'Temperatura']
+y=df[u'Altura']mplt.plot(x,y)
+mplt.grid(True)
+plt.xlabel('Temperatura (°C)')
+plt.ylabel('Altura (m)')
+Para la segunda gráfica
+x=df[u'DWPT']
+y=df[u'Altura']
+mplt.plot(x,y)
+mplt.grid(True)
+plt.xlabel('DWPT (°C)')
+plt.ylabel('Altitud')
+\end{verbatim}
+\includegraphics[width=12cm, height=12cm]{4.png}
+\end{center}
+\subsection{E Tefigrama}
+El tefigrama es un diagrama termodinámico que se usa para trazar perfiles verticales de temperatura, humedad y viento atmosférico. Este se utiliza para evaluar una amplia gama de condiciones meteorológicas, como la estabilidad atmosférica. \\
+Ahora para hacer el tefigrama pondremos los siguientes comandos:
+\begin{center}
+\begin{verbatim}
+import os.path
+import tephi as tph
+dew_point = pd.read_csv("/home/franciscoeas/Actividad 4/DATOS/
+presionvsrocio.csv", names=["Presión", "DWPT"])
+dry_bulb = pd.read_csv("/home/franciscoeas/Actividad 4/DATOS/
+presionvstemperatura.csv", names=["Presión", "TEMP"])
+tpg = tph.Tephigram()
+tpg.plot(dew_point)
+tpg.plot(dry_bulb)
+plt.title('Presión vs. Temperatura y Temperatura de Rocío')
+plt.show()
+\end{verbatim}
+\includegraphics[width=12cm, height=12cm]{5.png}
+\end{center}
+
+\newpage
+\section{Conclusión}
+En el trabajo anterior aprendimos a utilizar algunos de los comando de python y practicamos algunos que se utilizaron en las prácticas anteriores. 
+Aprendimos a utilizar algúnos paquetes como tephi para gráficar tafigramas y poder comparar las gráficas comunes en un esquema diferente. 
+
+\begin{thebibliography}{9}
+\bibitem[1]{Wyoming}
+University of Wyoming, sitio web: http://weather.uwyo.edu/upperair/sounding.html Última fecha de consulta: 12 de Febrero 2017.
+\bibitem[2]{Tephi}
+The Tephi user guide, sitio web: http://tephi.readthedocs.io/en/latest/index.html Última fecha de consulta: 27 de Febrero 2017.
+\end{thebibliography}
+
+
+
+\end{document}
