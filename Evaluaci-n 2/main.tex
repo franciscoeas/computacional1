@@ -1,0 +1,140 @@
+\include{preamble}
+\author{Álvarez Sánchez Francisco Eduardo}
+\title{\textbf{\textsc{Evaluación 2}}} 
+\date{\today}
+
+\begin{document}
+
+\begin{titlepage}
+	\centering
+    \begin{figure}[ht!]
+    \centering
+    \includegraphics[scale=0.5]{escudo.png}
+    
+    \textbf{UNIVERSIDAD DE SONORA \\ DIVISIÓN DE CIENCIAS EXACTAS Y NATURALES \\ DEPARTAMENTO DE FÍSICA \\ LICENCIATURA EN FÍSICA}
+	\maketitle
+    \hrule \bigskip
+    \large{Física computacional I}\\
+	Profr. Carlos Lizárraga Celaya
+    \end{figure}
+\thispagestyle{empty}
+\end{titlepage}
+
+\newpage
+\section{Resumen}
+\noindent  Los ciclos solares tienen una duración media de unos 11 años. El máximo solar y el mínimo solar se refieren respectivamente a períodos de conteo máximo y mínimo de manchas solares. Los ciclos se extienden de un mínimo a otro.
+\section{Introducción}
+\noindent El ciclo solar o ciclo de actividad magnético solar es el cambio casi periódico de 11 años en la actividad del Sol (incluyendo cambios en los niveles de radiación solar y expulsión de material solar) y apariencia (cambios en el número y tamaño de las manchas solares, bengalas y otras manifestaciones). Se han observado (por los cambios en la apariencia del sol y por los cambios vistos en la Tierra, como las auroras) durante siglos.
+
+Los cambios en el sol causan efectos en el espacio, en la atmósfera y en la superficie de la Tierra. Si bien es la variable dominante en la actividad solar, también se producen fluctuaciones aperiódicas.
+\newpage
+\section{Procedimiento}
+\subsection*{De los datos proporcionados, utiliza una transformada discreta de Fourier, para encontrar la frecuencia del ciclo principal. Muestra una gráfica con los principales modos encontrados. 
+}
+
+\noindent Para realizar la gráfica primero descargamos los datos del sitio que se indicó, posteriormente, de cierta manera limpiamos los datos y los leímos desde Python. Después de esto utilizamos la transformada discreta de Fourier para graficarla. 
+
+En la siguiente sección del código se muestra lo dicho con anterioridad:
+
+\begin{verbatim}
+from scipy.fftpack import fft, fftfreq, fftshift
+# number of signal points
+N = 3213
+# sample spacing
+T = 1.0
+x = df['Año']
+y = df['Manchas']
+yf = fft(y)
+xf = fftfreq(N, T)
+xf = fftshift(xf)
+yplot = fftshift(yf)
+import matplotlib.pyplot as plt
+plt.plot(xf, 2.0/N * np.abs(yplot))
+plt.xlim(0,0.03 )
+fig=plt.gcf()
+fig.set_size_inches(7,7)
+
+plt.xlabel("Fecha")
+plt.ylabel("Manchas")
+
+plt.grid()
+plt.show()
+
+
+\end{verbatim}
+Con la pequeña sección de código anterior, obtenemos como resultado la siguiente gráfica.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.75]{manchas.png}
+\end{figure}
+\newpage
+\subsection*{¿Encuentras un solo ciclo principal o un conjunto de ciclos con frecuencia cercana? ¿Cuál sería el promedio del conjunto de frecuencias?}
+\noindent Pudimos encontrar un conjunto de ciclos; específicamente tres en los cuales la frecuencia era muy cercana y tenían un promedio $f_p=0.00747$. En la siguiente gráfica vienen identificados los 3 ciclos. Para graficarla utilizamos la siguiente parte de código. 
+
+\begin{verbatim}
+# number of signal points
+N = 3213
+# sample spacing
+T = 1.0
+x = df['Año']
+y = df['Manchas']
+yf = fft(y)
+xf = fftfreq(N, T)
+xf = fftshift(xf)
+yplot = fftshift(yf)
+import matplotlib.pyplot as plt
+plt.plot(xf, 2.0/N * np.abs(yplot))
+plt.xlim(0,0.03 )
+fig=plt.gcf()
+fig.set_size_inches(7,7)
+
+plt.text(0.007,40,'1')
+plt.text(0.008,36,'2')
+plt.text(0.0083,30,'3')
+
+plt.xlabel("Fecha")
+plt.ylabel("Manchas")
+
+plt.grid()
+
+plt.show()
+\end{verbatim}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.75]{manchas2.png}
+\end{figure}
+
+\subsection*{¿Que otros ciclos relevantes encuentras? Proporciona una tabla con las amplitudes de los ciclos. }
+
+\begin{table}[ht!]
+\centering
+\caption{Datos de los modos}
+\begin{tabular}{|l|l|l|l|l}
+\cline{1-4}
+Modos  & Amplitud      & Frecuencia       & Periodo       &  \\ \cline{1-4}
+Modo 1 & 22.6781521056 & 0.00715841892312 & 11.6413043478 &  \\ \cline{1-4}
+Modo 2 & 39.9872332086 & 0.00746965452848 & 11.15625      &  \\ \cline{1-4}
+Modo 3 & 35.4198320032 & 0.00778089013383 & 10.71         &  \\ \cline{1-4}
+\end{tabular}
+\end{table}
+\newpage
+\subsection*{Lo que han encontrado hasta ahora son ciertas regularidades, incluso hay pronósticos de un rango para el número de manchas solares. ¿Cómo crees que es posible predecir el número de manchas?}
+\noindent Es posible aproximar el número de manchas que habrá en un tiempo futuro. Ya que estas se comportan como ondas, podemos encontrar de algunas manera una ecuación que las aproxime por lo tanto podríamos saber valores que no se encuentran en nuestro tiempo pero si en un futuro.
+
+Es posible que existan métodos estadísticos para aproximar también los valores futuros, sin embargo sabemos que todos partirán del mismo principio. 
+
+\begin{thebibliography}{9}
+\bibitem[1]{Ciclo solar}
+Ciclo solar \\
+
+Solar cycle. Wikipedia. Consultado el 26 de Abril de 2017. https://en.wikipedia.org/wiki/Solar\_cycle 
+\bibitem[2]{Física computacional}
+Física computacional: Actividad 6 \\
+
+Página de curso Computacional I. Profr. Carlos Lizárraga Celaya. Consultada el 26 de Abril de 2017. http://computacional1.pbworks.com/w/page/72847919/FrontPage
+
+\end{thebibliography}
+
+\end{document}
